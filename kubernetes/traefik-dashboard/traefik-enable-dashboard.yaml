@@ -1,0 +1,44 @@
+# Note: insecure!
+
+# https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml#L668
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  failurePolicy: reinstall
+  valuesContent: |-
+    additionalArguments:
+      - "--api"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--log.level=DEBUG"
+    ports:
+      traefik:
+        expose:
+          default: true
+    providers:
+      kubernetesCRD:
+        allowCrossNamespace: true
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: traefik-dashboard
+    namespace: kube-system
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+  spec:
+    rules:
+    - host: traefik.local
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: traefik
+              port:
+                number: 9000
