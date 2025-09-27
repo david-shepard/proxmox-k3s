@@ -1,5 +1,5 @@
-# Note: insecure!
-
+# NOTE: Just for development purposes, this is insecure without password. Dedicated ingress/gateway resource recommended.
+# Using `HelmChartConfig` k3s CR
 # https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml#L668
 ---
 apiVersion: helm.cattle.io/v1
@@ -22,23 +22,23 @@ spec:
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
----
-  apiVersion: networking.k8s.io/v1
-  kind: Ingress
-  metadata:
-    name: traefik-dashboard
-    namespace: kube-system
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: web
-  spec:
-    rules:
-    - host: traefik.local
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: traefik
-              port:
-                number: 9000
+# ---
+#   apiVersion: networking.k8s.io/v1
+#   kind: Ingress
+#   metadata:
+#     name: traefik-dashboard
+#     namespace: kube-system
+#     annotations:
+#       traefik.ingress.kubernetes.io/router.entrypoints: web
+#   spec:
+#     rules:
+#     - host: traefik.local
+#       http:
+#         paths:
+#         - path: /
+#           pathType: Prefix
+#           backend:
+#             service:
+#               name: traefik
+#               port:
+#                 number: 9000

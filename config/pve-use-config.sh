@@ -1,11 +1,16 @@
 #!/bin/bash
 
 
-if [[ "$#" != 2 ]]; then
-  echo "Usage $0  <config path> <hostname>"
-  echo "Example $0 ../config/pve-sample.conf k3s-node"
+if [[ "$#" != 4 ]]; then
+  echo "Usage $0  <config path> <hostname> <host ip> <gateway ip>"
+  echo "Example $0 pve-sample.conf k3s-node 192.168.0.5 192.168.0.1"
   exit 1
 fi
+
+export HOST_IP="$2"
+export GW_IP="$3"
+
+envsubst < pve-sample.conf > tmp.yaml && mv tmp.yaml pve-sample.conf
 
 mapfile -t configs < <(ls -1 /etc/pve/lxc/)
 last_config="${configs[-1]%%.*}"
