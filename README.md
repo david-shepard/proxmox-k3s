@@ -1,4 +1,6 @@
 ## k3s on proxmox 
+![healthchecks.io](https://healthchecks.io/badge/b217edc2-9e77-4082-b44c-925c27/ASe4QgWU-2.svg)
+
 Assorted scripts and configuration used to set up a kubernetes (k3s) homelab with 
 1. Follow these steps https://gist.github.com/triangletodd/02f595cd4c0dc9aac5f7763ca2264185
    - Example [config](./config)
