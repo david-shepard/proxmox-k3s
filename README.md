@@ -1,7 +1,7 @@
 ## k3s on proxmox 
 Assorted scripts and configuration used to set up a kubernetes (k3s) homelab with 
 1. Follow these steps https://gist.github.com/triangletodd/02f595cd4c0dc9aac5f7763ca2264185
-   - Example config in [config](./config)
+   - Example [config](./config)
 
 2. Refer to instructions: https://github.com/alexellis/k3sup
    - `k3sup install --ip 192.168.1.206 --user root`
@@ -11,4 +11,4 @@ Using mDNS for node dns resolution as to avoid another LXC and associated with s
 
 1. `sudo apt-get install avahi-daemon`
 
-2. See [line 14 @ /etc/nsswitch.conf](./config/etc/nsswitch.conf)
+2. See [line 12 @ /etc/nsswitch.conf](./config/etc/nsswitch.conf#L12)
