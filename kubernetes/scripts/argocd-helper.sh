@@ -1,6 +1,8 @@
 #!/bin/bash
 # set -euo pipefail
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 if [[ -t 1 ]]; then
   BOLD="\033[1m"; DIM="\033[2m"; RED="\033[31m"; GREEN="\033[32m"; YELLOW="\033[33m"; BLUE="\033[34m"; MAGENTA="\033[35m"; CYAN="\033[36m"; RESET="\033[0m"
 else
@@ -14,13 +16,29 @@ warn()     { echo -e "${YELLOW}⚠ $*${RESET}"; }
 error()    { echo -e "${RED}✖ $*${RESET}" >&2; exit 1; }
 command_exists() { command -v "$1" >/dev/null 2>&1; }
 
+function trap_cleanup() {
+  warn "Exiting early..."
+  exit 
+}
+trap trap_cleanup SIGINT EXIT
+
 usage() {
   echo "Usage: $0 [OPTIONS]"
-  echo "  --patch         Patch the ArgoCD server"
-  echo "  --install       Install ArgoCD"
-  echo "  --get-password  Get the ArgoCD initial admin password"
-  echo "  --help          Display this help message"
+  echo "  patch         Patch the ArgoCD server"
+  echo "  install       Install ArgoCD"
+  echo "  get-password  Get the ArgoCD initial admin password"
+  echo "  help          Display this help message"
   exit "$1"
+}
+
+get_events() {
+  local CURRENT_NAMESPACE=$(kubectl config view --minify --output 'jsonpath={..namespace}')
+  if kubectl get namespace argocd &> /dev/null; then
+    info "Getting events in 'argocd' namespace"
+    kubectl -n argocd get events
+  fi
+  info "Getting events in \"$CURRENT_NAMESPACE\" namespace"
+  kubectl get events
 }
 
 install_argocd() {
@@ -38,7 +56,7 @@ patch_argocd() {
 }
 
 get_password() {
-    SECRET=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+    local SECRET=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
     echo "ArgoCD initial admin password: $SECRET"
     warn "It's recommended to change this password after the initial login."
 }
@@ -53,18 +71,15 @@ if ! command_exists kubectl; then
 fi
 
 case "$1" in
-  install_argocd)
+  install_argocd | install)
     install_argocd
     exit
     ;;
-  patch_argocd)
+  patch_argocd | patch)
     patch_argocd
     ;;
   get_password)
     get_password
-    ;;
-  port_forward)
-    port_forward
     ;;
   -h | --help | help)
     usage 0

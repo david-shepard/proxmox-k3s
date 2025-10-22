@@ -1,0 +1,89 @@
+# Kubernetes secrets and sensitive data
+secrets/
+*.secret.yaml
+*.secret.yml
+*-secret.yaml
+*-secret.yml
+
+# Sealed secrets private keys
+sealed-secrets-key*.yaml
+*.key
+
+# Kubeconfig files
+kubeconfig
+*.kubeconfig
+config
+.kube/
+
+# Helm
+charts/
+*.tgz
+requirements.lock
+Chart.lock
+
+# ArgoCD
+# ArgoCD admin password files
+argocd-initial-admin-secret.yaml
+# ArgoCD local config cache
+.argocd/
+
+# Environment-specific overrides (if you use kustomize overlays)
+overlays/local/
+kustomization.yaml.bak
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# Terraform state (if you use Terraform for infrastructure)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Logs
+*.log
+
+# Local testing and development
+tmp/
+temp/
+.cache/
+
+# Private notes
+NOTES.md
+TODO.md
+notes/
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# SSH keys
+id_rsa
+id_rsa.pub
+*.pem
+
+# Values files with secrets (if using Helm)
+values.secret.yaml
+values.*.secret.yaml
+secrets.yaml
